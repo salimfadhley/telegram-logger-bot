@@ -2,7 +2,8 @@ version: '3.7'
 
 services:
   bot:
-    image: "salimfadhley/freedom-bot:latest
+    image: "salimfadhley/freedom-bot:latest"
     build:
       context: .
       target: py
+    entrypoint: "python -m bot.main"
