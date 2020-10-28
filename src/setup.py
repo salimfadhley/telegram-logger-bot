@@ -17,7 +17,7 @@ setuptools.setup(
       long_description=long_description,
       long_description_content_type="text/markdown",
       url="https://github.com/pypa/sampleproject",
-      packages=setuptools.find_packages(),
+      packages=["bot", "test_bot"],
       classifiers=[
             "Programming Language :: Python :: 3",
             "License :: OSI Approved :: MIT License",
