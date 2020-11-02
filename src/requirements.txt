@@ -1,2 +1,6 @@
 python-telegram-bot
+localstack
 boto3
+boto3-type-annotations
+pytest
+

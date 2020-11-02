@@ -11,11 +11,26 @@ services:
     entrypoint: "python -m bot.main"
     env_file:
       - .environment
+    links:
+      - localstack
+    networks:
+      - internal
+
+  python:
+    image: "salimfadhley/freedom-bot:latest"
+    build:
+      context: .
+      target: py
+    volumes:
+      - ./src:/src
+    env_file:
+      - .environment
+    networks:
+      - internal
 
   localstack:
     container_name: "${LOCALSTACK_DOCKER_NAME-localstack_main}"
     image: localstack/localstack
-    network_mode: bridge
     ports:
       - "4566:4566"
       - "4571:4571"
@@ -32,3 +47,9 @@ services:
     volumes:
       - "${TMPDIR:-/tmp/localstack}:/tmp/localstack"
       - "/var/run/docker.sock:/var/run/docker.sock"
+    networks:
+      - internal
+
+networks:
+  internal:
+
