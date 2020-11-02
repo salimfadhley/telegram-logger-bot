@@ -10,13 +10,12 @@ Basic inline bot example. Applies different text transformations.
 Press Ctrl-C on the command line or send a signal to the process to stop the
 bot.
 """
+import yaml
 import logging
 import os
-from uuid import uuid4
+from telegram.update import Update
 
-from telegram import InlineQueryResultArticle, ParseMode, InputTextMessageContent
 from telegram.ext import Updater, InlineQueryHandler, CommandHandler, MessageHandler, Filters
-from telegram.utils.helpers import escape_markdown
 
 log = logging.getLogger(__name__)
 
@@ -27,23 +26,23 @@ token = os.environ["TELEGRAM_TOKEN"]
 
 # Define a few command handlers. These usually take the two arguments update and
 # context. Error handlers also receive the raised TelegramError object in error.
-def start(update, context):
+def start(update:Update, context):
     """Send a message when the command /start is issued."""
     update.message.reply_text('Hi!')
 
 
-def help_command(update, context):
+def help_command(update:Update, context):
     """Send a message when the command /help is issued."""
     update.message.reply_text('Help!')
 
 
-def foo_command(update, context):
+def foo_command(update:Update, context):
     """Send a message when the command /help is issued."""
     update.message.reply_text('Foo!')
 
 
-def echo(update, context):
-    log.warning("Hello!")
+def echo(update:Update, context):
+    log.warning(yaml.dump(update.to_dict()))
     update.message.reply_text(update.message.text)
 
 
@@ -63,7 +62,7 @@ def main():
     dp.add_handler(CommandHandler("foo", foo_command))
 
     # on noncommand i.e message - echo the message on Telegram
-    dp.add_handler(MessageHandler(Filters.text & ~Filters.command, echo))
+    dp.add_handler(MessageHandler(~Filters.command, echo))
 
     # Start the Bot
     updater.start_polling()

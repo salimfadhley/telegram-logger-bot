@@ -3,4 +3,4 @@ localstack
 boto3
 boto3-type-annotations
 pytest
-
+pyyaml
