@@ -1,18 +1,19 @@
 version: '3.7'
 
 services:
-  bot:
+  client:
     image: "salimfadhley/freedom-bot:latest"
     build:
       context: .
       target: py
     volumes:
-    - ./src:/src
-    entrypoint: "python -m bot.main"
+    - ./src:/src:ro
+    - ~/.config/simpleclient:/config/simpleclient:ro
+    entrypoint: /usr/local/bin/run_client
     env_file:
       - .environment
-    links:
-      - localstack
+#    links:
+#      - localstack
     networks:
       - internal
 
@@ -22,7 +23,8 @@ services:
       context: .
       target: py
     volumes:
-      - ./src:/src
+      - ./src:/src:ro
+      - ~/.config/simpleclient:/config/simpleclient:ro
     env_file:
       - .environment
     networks:
@@ -44,8 +46,9 @@ services:
       - KINESIS_ERROR_PROBABILITY=${KINESIS_ERROR_PROBABILITY- }
       - DOCKER_HOST=unix:///var/run/docker.sock
       - HOST_TMP_FOLDER=${TMPDIR}
+      - TMPDIR=/tmp/localstack
     volumes:
-      - "${TMPDIR:-/tmp/localstack}:/tmp/localstack"
+      - "/tmp/localstack:/tmp/localstack"
       - "/var/run/docker.sock:/var/run/docker.sock"
     networks:
       - internal
